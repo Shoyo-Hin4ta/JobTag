@@ -44,8 +44,8 @@ npx shadcn@latest add button card dialog select toast --legacy-peer-deps
 **Morning (Day 1):**
 - [x] Project setup with Next.js 14, TypeScript, Tailwind CSS
 - [x] Install all dependencies (shadcn/ui, Supabase, etc.)
-- [ ] Set up Supabase project
-- [ ] Configure space-themed design system
+- [x] Set up Supabase project
+- [x] Configure space-themed design system
 
 **Afternoon - Evening (Day 1):**
 - [ ] Create killer landing page with:
