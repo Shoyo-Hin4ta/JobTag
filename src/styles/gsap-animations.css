@@ -1,0 +1,267 @@
+/* GSAP-specific animation styles - Clean implementation */
+
+/* Performance optimizations */
+.feature-card,
+.email-card,
+.stat-card,
+.cta-button,
+.particle {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+/* Hero title enhancements */
+.hero-title {
+  letter-spacing: 0.02em;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Email cards chaos styling */
+.email-card {
+  position: absolute;
+  transform-origin: center center;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: none; /* Let GSAP handle all animations */
+}
+
+/* Horizontal scroll section */
+.horizontal-scroll-section {
+  overflow: hidden;
+}
+
+.horizontal-container {
+  display: flex;
+  width: 300vw;
+  height: 100%;
+}
+
+.stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  flex-shrink: 0;
+}
+
+.stage-1 .email-card {
+  cursor: pointer;
+}
+
+/* Feature cards 3D effect */
+.feature-card {
+  perspective: 1000px;
+  backdrop-filter: blur(16px);
+  transform: translateZ(0);
+}
+
+.feature-card:hover {
+  transform: translateY(-4px) rotateX(5deg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Stat cards counter styling */
+.stat-card {
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-number {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+/* CTA button enhancements */
+.cta-button {
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+}
+
+.cta-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease-out, height 0.6s ease-out;
+  pointer-events: none;
+}
+
+.cta-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Particle system */
+.particle {
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(0.5px);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: auto; /* Let GSAP handle smooth scrolling */
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Hide scrollbars */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+/* Navigation dots glow effect */
+.glow {
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.8),
+              0 0 40px rgba(124, 58, 237, 0.4);
+}
+
+/* Parallax elements */
+[data-speed] {
+  will-change: transform;
+}
+
+/* Gradient text with glow (no yellow) */
+.gradient-text {
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+/* Glass morphism enhancement */
+.glass-3d {
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transform-style: preserve-3d;
+}
+
+/* Animation states for GSAP control */
+.gsap-hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.gsap-visible {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+/* Ensure button background is always defined */
+.hero-cta {
+  background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary))) !important;
+}
+
+/* Ensure buttons work properly as inline-flex with GSAP */
+.hero-cta,
+.cta-button {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  /* Ensure vibrant appearance */
+  background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary))) !important;
+  border: none !important;
+  box-shadow: 0 8px 32px rgba(124, 58, 237, 0.3) !important;
+}
+
+/* Enhanced gradient animation (no yellow) */
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradient {
+  background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease-in-out infinite;
+}
+
+/* Magnetic effect for interactive elements */
+.magnetic-zone {
+  position: relative;
+  cursor: pointer;
+}
+
+.magnetic-zone::after {
+  content: '';
+  position: absolute;
+  inset: -50px;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Floating animation for persistent elements */
+@keyframes float-gentle {
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg); 
+  }
+  33% { 
+    transform: translateY(-8px) rotate(1deg); 
+  }
+  66% { 
+    transform: translateY(4px) rotate(-1deg); 
+  }
+}
+
+.animate-float-gentle {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+/* Pulse glow for active elements */
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.5); 
+  }
+  50% { 
+    box-shadow: 0 0 40px hsl(var(--primary) / 0.8), 0 0 60px hsl(var(--primary) / 0.4); 
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Disable animations for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* GPU acceleration for smooth animations */
+.gsap-3d {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Enhanced backdrop blur for better performance */
+@supports (backdrop-filter: blur(1px)) {
+  .backdrop-blur-enhanced {
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+  }
+}

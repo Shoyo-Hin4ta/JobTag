@@ -1,8 +1,27 @@
-import { type NextRequest } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 
 export async function middleware(request: NextRequest) {
-  return await updateSession(request)
+  const response = await updateSession(request)
+  
+  const pathname = request.nextUrl.pathname
+  
+  const publicPaths = ['/', '/auth/login', '/auth/callback', '/api']
+  const isPublicPath = publicPaths.some(path => pathname.startsWith(path))
+  
+  const isAuthenticated = response.headers.get('x-supabase-auth-session')
+  
+  if (!isAuthenticated && !isPublicPath) {
+    const redirectUrl = new URL('/auth/login', request.url)
+    redirectUrl.searchParams.set('redirectTo', pathname)
+    return NextResponse.redirect(redirectUrl)
+  }
+  
+  if (isAuthenticated && pathname === '/auth/login') {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
+  
+  return response
 }
 
 export const config = {
