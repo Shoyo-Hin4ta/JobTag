@@ -18,14 +18,14 @@ export default function RealtimeStats({ userId }: { userId: string }) {
   const calculateStats = (applications: Application[]) => {
     const total = applications.length
     const active = applications.filter(app => 
-      ['applied', 'screening', 'interview', 'technical', 'final'].includes(app.status)
+      app.status && ['applied', 'screening', 'interview', 'technical', 'final'].includes(app.status)
     ).length
 
     const oneWeekAgo = new Date()
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
     
     const thisWeek = applications.filter(app => 
-      new Date(app.created_at) > oneWeekAgo
+      app.created_at && new Date(app.created_at) > oneWeekAgo
     ).length
 
     return { total, active, thisWeek }

@@ -13,7 +13,7 @@ interface ApplicationsTableProps {
   applications: Application[]
 }
 
-type SortField = 'company' | 'position' | 'status' | 'updated_at' | 'created_at'
+type SortField = 'company_name' | 'position_title' | 'status' | 'updated_at' | 'created_at'
 type SortDirection = 'asc' | 'desc'
 
 export default function ApplicationsTable({ applications }: ApplicationsTableProps) {
@@ -97,23 +97,23 @@ export default function ApplicationsTable({ applications }: ApplicationsTablePro
           <thead className="border-b border-white/10">
             <tr>
               <th 
-                onClick={() => handleSort('company')}
+                onClick={() => handleSort('company_name')}
                 className="px-6 py-4 text-left text-sm font-medium text-gray-300 cursor-pointer hover:text-white transition-colors"
               >
                 <div className="flex items-center space-x-1">
                   <span>Company</span>
-                  {sortField === 'company' && (
+                  {sortField === 'company_name' && (
                     sortDirection === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
                   )}
                 </div>
               </th>
               <th 
-                onClick={() => handleSort('position')}
+                onClick={() => handleSort('position_title')}
                 className="px-6 py-4 text-left text-sm font-medium text-gray-300 cursor-pointer hover:text-white transition-colors"
               >
                 <div className="flex items-center space-x-1">
                   <span>Position</span>
-                  {sortField === 'position' && (
+                  {sortField === 'position_title' && (
                     sortDirection === 'asc' ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
                   )}
                 </div>

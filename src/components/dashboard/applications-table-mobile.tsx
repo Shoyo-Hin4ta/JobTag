@@ -41,9 +41,11 @@ export default function ApplicationsTableMobile({ applications }: ApplicationsTa
       {applications.map((application) => {
         const statusConfig = STATUS_CONFIG[application.status as keyof typeof STATUS_CONFIG] || STATUS_CONFIG.applied
         const isExpanded = expandedCard === application.id
-        const daysActive = Math.floor(
-          (new Date().getTime() - new Date(application.created_at).getTime()) / (1000 * 60 * 60 * 24)
-        )
+        const daysActive = application.created_at
+          ? Math.floor(
+              (new Date().getTime() - new Date(application.created_at).getTime()) / (1000 * 60 * 60 * 24)
+            )
+          : 0
 
         return (
           <div
@@ -60,9 +62,9 @@ export default function ApplicationsTableMobile({ applications }: ApplicationsTa
                 <div className="flex-1">
                   <div className="flex items-center space-x-2 mb-1">
                     <span className="text-xl">🏢</span>
-                    <h3 className="font-semibold text-white">{application.company}</h3>
+                    <h3 className="font-semibold text-white">{application.company_name}</h3>
                   </div>
-                  <p className="text-sm text-gray-300">{application.position}</p>
+                  <p className="text-sm text-gray-300">{application.position_title}</p>
                 </div>
                 <button className="p-1 hover:bg-white/10 rounded-lg transition-colors">
                   <MoreVertical className="w-4 h-4 text-gray-400" />
@@ -79,7 +81,9 @@ export default function ApplicationsTableMobile({ applications }: ApplicationsTa
                     <span>{application.status}</span>
                   </span>
                   <span className="text-xs text-gray-400">
-                    {formatDistanceToNow(new Date(application.updated_at), { addSuffix: true })}
+                    {application.updated_at 
+                      ? formatDistanceToNow(new Date(application.updated_at), { addSuffix: true })
+                      : 'Never'}
                   </span>
                 </div>
                 <span className="text-xs text-gray-500">{daysActive}d</span>
@@ -91,8 +95,8 @@ export default function ApplicationsTableMobile({ applications }: ApplicationsTa
               <div className="px-4 pb-4 border-t border-white/10 pt-4">
                 <ApplicationTimeline 
                   statusHistory={application.status_history as any || []} 
-                  currentStatus={application.status}
-                  createdAt={application.created_at}
+                  currentStatus={application.status || 'applied'}
+                  createdAt={application.created_at || new Date().toISOString()}
                 />
                 
                 {application.job_url && (

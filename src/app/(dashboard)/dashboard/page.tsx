@@ -11,24 +11,12 @@ export default async function DashboardPage({
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Fetch applications and calculate stats
+  // Fetch applications
   const { data: applications } = await supabase
     .from('applications')
     .select('*')
     .eq('user_id', user?.id)
     .order('created_at', { ascending: false })
-
-  // Calculate stats
-  const stats = {
-    total: applications?.length || 0,
-    active: applications?.filter(app => 
-      ['applied', 'screening', 'interview', 'technical', 'final'].includes(app.status)
-    ).length || 0,
-    responseRate: applications && applications.length > 0
-      ? Math.round((applications.filter(app => app.status !== 'applied').length / applications.length) * 100)
-      : 0,
-    avgTime: calculateAvgTime(applications || [])
-  }
 
   return (
     <div className="p-6 space-y-6 pb-24 md:pb-6">
@@ -51,21 +39,4 @@ export default async function DashboardPage({
       <AddApplicationFAB />
     </div>
   )
-}
-
-function calculateAvgTime(applications: any[]): string {
-  if (!applications.length) return '0 days'
-  
-  const responded = applications.filter(app => app.status !== 'applied')
-  if (!responded.length) return '0 days'
-  
-  const totalDays = responded.reduce((sum, app) => {
-    const applied = new Date(app.created_at)
-    const updated = new Date(app.updated_at)
-    const days = Math.floor((updated.getTime() - applied.getTime()) / (1000 * 60 * 60 * 24))
-    return sum + days
-  }, 0)
-  
-  const avg = Math.round(totalDays / responded.length)
-  return `${avg} days`
 }

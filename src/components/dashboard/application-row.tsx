@@ -97,9 +97,11 @@ export default function ApplicationRow({ application, isExpanded, onToggle }: Ap
     }
   }, [isExpanded])
 
-  const daysActive = Math.floor(
-    (new Date().getTime() - new Date(application.created_at).getTime()) / (1000 * 60 * 60 * 24)
-  )
+  const daysActive = application.created_at 
+    ? Math.floor(
+        (new Date().getTime() - new Date(application.created_at).getTime()) / (1000 * 60 * 60 * 24)
+      )
+    : 0
 
   return (
     <Fragment>
@@ -113,12 +115,12 @@ export default function ApplicationRow({ application, isExpanded, onToggle }: Ap
           <div className="flex items-center space-x-2">
             <span className="text-2xl">🏢</span>
             <span className="text-white font-medium group-hover:text-purple-300 transition-colors">
-              {application.company}
+              {application.company_name}
             </span>
           </div>
         </td>
         <td className="px-6 py-4 text-gray-300">
-          {application.position}
+          {application.position_title}
         </td>
         <td className="px-6 py-4">
           <span className={`
@@ -130,7 +132,9 @@ export default function ApplicationRow({ application, isExpanded, onToggle }: Ap
           </span>
         </td>
         <td className="px-6 py-4 text-gray-400 text-sm">
-          {formatDistanceToNow(new Date(application.updated_at), { addSuffix: true })}
+          {application.updated_at 
+            ? formatDistanceToNow(new Date(application.updated_at), { addSuffix: true })
+            : 'Never'}
         </td>
         <td className="px-6 py-4 text-gray-400 text-sm">
           {daysActive} days
@@ -143,8 +147,8 @@ export default function ApplicationRow({ application, isExpanded, onToggle }: Ap
             <div className="px-6 py-4">
               <ApplicationTimeline 
                 statusHistory={application.status_history as any || []} 
-                currentStatus={application.status}
-                createdAt={application.created_at}
+                currentStatus={application.status || 'applied'}
+                createdAt={application.created_at || new Date().toISOString()}
               />
             </div>
           </td>

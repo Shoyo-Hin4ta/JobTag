@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useApplications } from '@/hooks/use-applications'
 import ApplicationsTable from './applications-table'
 import { createClient } from '@/lib/supabase/client'
 import { Database } from '@/lib/supabase/types'
@@ -47,8 +46,8 @@ export default function RealtimeApplicationsWrapper({
                 if (prev.find(app => app.id === newApp.id)) return prev
                 
                 // Show toast notification
-                toast.success(`New application added: ${newApp.company}`, {
-                  description: newApp.position,
+                toast.success(`New application added: ${newApp.company_name}`, {
+                  description: newApp.position_title,
                   duration: 5000,
                 })
 
@@ -86,7 +85,7 @@ export default function RealtimeApplicationsWrapper({
               // Show toast for status changes
               const oldApp = applications.find(app => app.id === updatedApp.id)
               if (oldApp && oldApp.status !== updatedApp.status) {
-                toast.info(`Status updated for ${updatedApp.company}`, {
+                toast.info(`Status updated for ${updatedApp.company_name}`, {
                   description: `Changed to: ${updatedApp.status}`,
                   duration: 4000,
                 })
@@ -110,7 +109,7 @@ export default function RealtimeApplicationsWrapper({
   const filteredApplications = statusFilter && statusFilter !== 'all'
     ? applications.filter(app => {
         if (statusFilter === 'interview') {
-          return ['screening', 'interview', 'technical', 'final'].includes(app.status)
+          return app.status && ['screening', 'interview', 'technical', 'final'].includes(app.status)
         }
         return app.status === statusFilter
       })
