@@ -161,6 +161,11 @@
     50% { opacity: 1; }
   }
   
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }
@@ -171,6 +176,10 @@
   
   .animate-twinkle {
     animation: twinkle 3s ease-in-out infinite;
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out;
   }
   
   /* Disable animations for reduced motion */

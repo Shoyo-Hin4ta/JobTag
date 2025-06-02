@@ -1,15 +1,46 @@
 import { type NextRequest, NextResponse } from 'next/server'
-import { updateSession } from '@/lib/supabase/middleware'
+import { createServerClient } from '@supabase/ssr'
 
 export async function middleware(request: NextRequest) {
-  const response = await updateSession(request)
+  let response = NextResponse.next({
+    request,
+  })
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll()
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
+          response = NextResponse.next({
+            request,
+          })
+          cookiesToSet.forEach(({ name, value, options }) =>
+            response.cookies.set(name, value, options)
+          )
+        },
+      },
+    }
+  )
+
+  // Get the user session
+  const { data: { user } } = await supabase.auth.getUser()
   
   const pathname = request.nextUrl.pathname
-  
   const publicPaths = ['/', '/auth/login', '/auth/callback', '/api']
   const isPublicPath = publicPaths.some(path => pathname.startsWith(path))
+  const isAuthenticated = !!user
   
-  const isAuthenticated = response.headers.get('x-supabase-auth-session')
+  console.log('[Middleware Debug]', {
+    pathname,
+    isAuthenticated,
+    userId: user?.id,
+    isPublicPath
+  })
   
   if (!isAuthenticated && !isPublicPath) {
     const redirectUrl = new URL('/auth/login', request.url)
@@ -17,7 +48,9 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl)
   }
   
-  if (isAuthenticated && pathname === '/auth/login') {
+  // Redirect authenticated users from login or root to dashboard
+  if (isAuthenticated && (pathname === '/auth/login' || pathname === '/')) {
+    console.log('[Middleware] Redirecting authenticated user to dashboard')
     return NextResponse.redirect(new URL('/dashboard', request.url))
   }
   

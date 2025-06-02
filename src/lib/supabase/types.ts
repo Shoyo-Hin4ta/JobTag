@@ -15,14 +15,17 @@ export type Database = {
           archived: boolean | null
           company_name: string
           created_at: string | null
+          first_contact_date: string | null
           id: string
           job_url: string | null
+          last_status_date: string | null
           location: string | null
           notes: string | null
           position_title: string
           source: string | null
           source_email_id: string | null
           status: string | null
+          status_history: Json | null
           updated_at: string | null
           user_id: string | null
         }
@@ -31,14 +34,17 @@ export type Database = {
           archived?: boolean | null
           company_name: string
           created_at?: string | null
+          first_contact_date?: string | null
           id?: string
           job_url?: string | null
+          last_status_date?: string | null
           location?: string | null
           notes?: string | null
           position_title: string
           source?: string | null
           source_email_id?: string | null
           status?: string | null
+          status_history?: Json | null
           updated_at?: string | null
           user_id?: string | null
         }
@@ -47,14 +53,17 @@ export type Database = {
           archived?: boolean | null
           company_name?: string
           created_at?: string | null
+          first_contact_date?: string | null
           id?: string
           job_url?: string | null
+          last_status_date?: string | null
           location?: string | null
           notes?: string | null
           position_title?: string
           source?: string | null
           source_email_id?: string | null
           status?: string | null
+          status_history?: Json | null
           updated_at?: string | null
           user_id?: string | null
         }

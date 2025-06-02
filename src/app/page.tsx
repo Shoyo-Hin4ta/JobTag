@@ -1,5 +1,8 @@
 "use client"
 
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 import dynamic from 'next/dynamic'
 
 // Dynamically import GSAP page to avoid SSR issues
@@ -16,5 +19,23 @@ const GSAPScrollytellingPage = dynamic(
 )
 
 export default function LandingPage() {
+  const router = useRouter()
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      
+      console.log('[Landing Page] Auth check:', { isAuthenticated: !!user, userId: user?.id })
+      
+      if (user) {
+        console.log('[Landing Page] User authenticated, redirecting to dashboard')
+        router.push('/dashboard')
+      }
+    }
+    
+    checkAuth()
+  }, [router])
+
   return <GSAPScrollytellingPage />
 }
